@@ -1,0 +1,9 @@
+package [pack]
+
+type [model_name] struct {
+[field]
+}
+
+func ([model_name]) TableName() string {
+    return "[table]"
+}

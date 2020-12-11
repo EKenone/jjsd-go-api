@@ -1,0 +1,14 @@
+wechat:
+  appid: wx13a11d44d8580fb9
+  secret: f4cd3528eabfa1ffaa960b5e70bd827d
+
+mysql:
+  host: 11.11.11.114
+  port: 3306
+  user: jjsd
+  pass: 123456
+
+redis:
+  host: 11.11.11.114
+  port: 6379
+
