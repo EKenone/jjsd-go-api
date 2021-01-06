@@ -44,13 +44,13 @@ func (s *GoodService) KeywordList(keyword string) ([]KeywordList, error, bool) {
 }
 
 type NumberShow struct {
-	ID            uint    `json:"id"`
-	Name          string  `json:"name"`
-	Number        string  `json:"number"`
-	Unit          string  `json:"unit"`
-	Format        string  `json:"format"`
-	RetailPrice   float64 `json:"retail_price"`
-	PurchasePrice float64 `json:"purchase_price"`
+	ID             uint    `json:"id"`
+	Name           string  `json:"name"`
+	Number         string  `json:"number"`
+	Unit           string  `json:"unit"`
+	Format         string  `json:"format"`
+	RetailPrice    float64 `json:"retail_price"`
+	WholesalePrice float64 `json:"wholesale_price"`
 }
 
 func (s *GoodService) Number(number string) (NumberShow, error, bool) {
@@ -67,12 +67,12 @@ func (s *GoodService) Number(number string) (NumberShow, error, bool) {
 	}
 
 	return NumberShow{
-		ID:            goods.ID,
-		Name:          goods.Name,
-		Number:        goods.Number,
-		Unit:          goods.Unit,
-		Format:        goods.Format,
-		RetailPrice:   goods.RetailPrice,
-		PurchasePrice: goods.PurchasePrice,
+		ID:             goods.ID,
+		Name:           goods.Name,
+		Number:         goods.Number,
+		Unit:           goods.Unit,
+		Format:         goods.Format,
+		RetailPrice:    goods.RetailPrice,
+		WholesalePrice: goods.WholesalePrice,
 	}, err, false
 }
