@@ -105,7 +105,7 @@ func mysqlModel() string {
 		base += "	" + "`gorm:\"column:" + v.Field
 
 		if v.Key == "PRI" {
-			base += ",primaryKey"
+			base += ";primaryKey"
 		}
 
 		base += "\"` \r\n"
