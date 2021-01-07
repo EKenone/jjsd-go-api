@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"jjsd-go-api/api/mini/services/wx_fans"
-	"log"
 )
 
 func (c *Controller) GetSession(ctx *gin.Context) {
@@ -27,19 +26,16 @@ func (c *Controller) GetSession(ctx *gin.Context) {
 func (c *Controller) SetUserInfo(ctx *gin.Context) {
 	encryptedData := ctx.PostForm("encrypted_data")
 	iv := ctx.PostForm("iv")
-	signature := ctx.PostForm("signature")
+	//signature := ctx.PostForm("signature")
 	sessionKey := ctx.PostForm("session_key")
 
 	authObj := c.WcMiniInit().GetEncryptor()
-	log.Println(encryptedData)
-	log.Println(iv)
-	log.Println(sessionKey)
 	data, err := authObj.Decrypt(sessionKey, encryptedData, iv)
 	if err != nil {
 		ctx.JSON(200, gin.H{"code": 401, "msg": err.Error()})
 		return
 	}
-	log.Println(data, signature)
+
 	service := wx_fans.WxFansService{
 		Ctx: ctx,
 	}

@@ -11,16 +11,16 @@ type GoodService struct {
 }
 
 type KeywordList struct {
-	ID     uint   `json:"id"`
-	Name   string `json:"name"`
-	Format string `json:"format"`
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+	Unit string `json:"unit"`
 }
 
 func (s *GoodService) KeywordList(keyword string) ([]KeywordList, error, bool) {
 	db := models.DbLink()
 	var goods []models.Goods
 	keyword = "%" + keyword + "%"
-	err := db.Debug().Where("name LIKE ? OR short_name LIKE ?", keyword, keyword).Find(&goods).Error
+	err := db.Debug().Where("name LIKE ? OR short_name LIKE ?", keyword, keyword).Limit(50).Order("id desc").Find(&goods).Error
 
 	if err == gorm.ErrRecordNotFound {
 		return []KeywordList{}, err, true
@@ -34,9 +34,9 @@ func (s *GoodService) KeywordList(keyword string) ([]KeywordList, error, bool) {
 	l := len(goods)
 	for i := 0; i < l; i++ {
 		list = append(list, KeywordList{
-			ID:     goods[i].ID,
-			Name:   goods[i].Name,
-			Format: goods[i].Format,
+			ID:   goods[i].ID,
+			Name: goods[i].Name,
+			Unit: goods[i].Unit,
 		})
 	}
 
@@ -75,4 +75,12 @@ func (s *GoodService) Number(number string) (NumberShow, error, bool) {
 		RetailPrice:    goods.RetailPrice,
 		WholesalePrice: goods.WholesalePrice,
 	}, err, false
+}
+
+func (s *GoodService) UpdateNumber(id int, number string) error {
+	db := models.DbLink()
+
+	err := db.Debug().Model(&models.Goods{}).Where("id = ?", id).Update("number", number).Error
+
+	return err
 }
