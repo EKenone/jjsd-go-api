@@ -84,3 +84,24 @@ func (s *GoodService) UpdateNumber(id int, number string) error {
 
 	return err
 }
+
+type AddForm struct {
+	Name           string  `form:"name"`
+	ShortName      string  `form:"short_name"`
+	Number         string  `form:"number"`
+	Unit           string  `form:"unit"`
+	Format         string  `form:"format"`
+	WholesalePrice float64 `form:"wholesale_price"`
+}
+
+func (s *GoodService) GoodsAdd(form AddForm) {
+	db := models.DbLink()
+	db.Create(models.Goods{
+		Name:           form.Name,
+		ShortName:      form.ShortName,
+		Number:         form.Number,
+		Unit:           form.Unit,
+		Format:         form.Format,
+		WholesalePrice: form.WholesalePrice,
+	})
+}

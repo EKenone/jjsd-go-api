@@ -65,3 +65,17 @@ func (c *Controller) GoodsUpdateNumber(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{"code": 200, "msg": "ok"})
 }
+
+func (c *Controller) GoodsAdd(ctx *gin.Context) {
+	var form goods.AddForm
+	if err := ctx.ShouldBind(&form); err != nil {
+		ctx.JSON(200, gin.H{"code": 500, "msg": err.Error()})
+		return
+	}
+
+	service := goods.GoodService{Ctx: ctx}
+	service.GoodsAdd(form)
+
+	ctx.JSON(200, gin.H{"code": 200, "msg": "ok"})
+	return
+}

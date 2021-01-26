@@ -14,7 +14,7 @@ func Init(eg *gin.Engine) *gin.Engine {
 	})
 
 	eg.POST("goods/update-number", c.GoodsUpdateNumber)
-
+	eg.POST("goods/add", c.GoodsAdd)
 	eg.GET("wx-fans/get-session", c.GetSession)
 
 	eg = middleware.Init(eg)
