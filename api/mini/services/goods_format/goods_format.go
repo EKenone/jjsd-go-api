@@ -14,7 +14,7 @@ func (s *GoodFormatService) List() []string {
 	var format []string
 	db := models.DbLink()
 
-	db.Model(&models.GoodsFormat{}).Order("id DESC").Pluck("title", &format)
+	db.Model(&models.GoodsFormat{}).Where("is_del = ?", 0).Order("id DESC").Pluck("title", &format)
 
 	return format
 }
