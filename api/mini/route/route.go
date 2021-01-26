@@ -24,5 +24,8 @@ func Init(eg *gin.Engine) *gin.Engine {
 
 	eg.POST("wx-fans/set-user-info", c.SetUserInfo)
 
+	eg.GET("goods-format/list", c.GoodsFormatList)
+	eg.GET("goods-unit/list", c.GoodsUnitList)
+
 	return eg
 }
