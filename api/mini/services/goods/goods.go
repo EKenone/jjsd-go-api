@@ -94,9 +94,11 @@ type AddForm struct {
 	WholesalePrice float64 `form:"wholesale_price"`
 }
 
+// 添加商品
 func (s *GoodService) GoodsAdd(form AddForm) {
+
 	db := models.DbLink()
-	db.Create(models.Goods{
+	db.Create(&models.Goods{
 		Name:           form.Name,
 		ShortName:      form.ShortName,
 		Number:         form.Number,
