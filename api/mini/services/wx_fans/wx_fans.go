@@ -46,7 +46,7 @@ func (s *WxFansService) GetSession(openid string, unionid string, sessionKey str
 	// 异步把关联存起来
 	go func() {
 		shopId, _ := strconv.Atoi(s.Ctx.Query("shop_id"))
-		db.Where("shop_id = ? AND fans_id = ?", shopId, fans.ID).FirstOrCreate(models.WxFansShopRelation{
+		db.Where("shop_id = ? AND fans_id = ?", shopId, fans.ID).FirstOrCreate(&models.WxFansShopRelation{
 			ShopId: uint(shopId),
 			FansId: fans.ID,
 		})

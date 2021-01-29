@@ -93,6 +93,7 @@ type AddForm struct {
 	Unit           string  `form:"unit"`
 	Format         string  `form:"format"`
 	WholesalePrice float64 `form:"wholesale_price"`
+	RetailPrice    float64 `form:"retail_price"`
 }
 
 // 添加商品
@@ -107,5 +108,6 @@ func (s *GoodService) GoodsAdd(form AddForm) {
 		Unit:           form.Unit,
 		Format:         form.Format,
 		WholesalePrice: form.WholesalePrice,
+		RetailPrice:    form.RetailPrice,
 	})
 }

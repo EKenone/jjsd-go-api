@@ -73,9 +73,10 @@ func (c *Controller) GoodsAdd(ctx *gin.Context) {
 		return
 	}
 
-	service := goods.GoodService{Ctx: ctx}
-	service.GoodsAdd(form)
+	go func() {
+		service := goods.GoodService{Ctx: ctx}
+		service.GoodsAdd(form)
+	}()
 
 	ctx.JSON(200, gin.H{"code": 200, "msg": "ok"})
-	return
 }
