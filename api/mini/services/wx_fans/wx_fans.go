@@ -31,6 +31,7 @@ func (s *WxFansService) GetSession(openid string, unionid string, sessionKey str
 	}
 
 	db.Debug().Where("openid = ? AND is_del = ?", openid, 0).FirstOrCreate(&fans)
+
 	tokenStr := strconv.Itoa(int(fans.ID)) + "_" + fans.Openid
 	data := []byte(tokenStr)
 	tokenByte := sha1.Sum(data)
@@ -41,6 +42,15 @@ func (s *WxFansService) GetSession(openid string, unionid string, sessionKey str
 	var ctx = context.Background()
 	redis := cache.GetClient()
 	redis.Set(ctx, cache.PrefixKey(token), fansJson, time.Hour*2)
+
+	// 异步把关联存起来
+	go func() {
+		shopId, _ := strconv.Atoi(s.Ctx.Query("shop_id"))
+		db.Where("shop_id = ? AND fans_id = ?", shopId, fans.ID).FirstOrCreate(models.WxFansShopRelation{
+			ShopId: uint(shopId),
+			FansId: fans.ID,
+		})
+	}()
 
 	return Session{Token: token, FansId: fans.ID, SessionKey: sessionKey}
 }

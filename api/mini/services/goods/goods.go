@@ -20,7 +20,7 @@ func (s *GoodService) KeywordList(keyword string) ([]KeywordList, error, bool) {
 	db := models.DbLink()
 	var goods []models.Goods
 	keyword = "%" + keyword + "%"
-	err := db.Debug().Where("name LIKE ? OR short_name LIKE ?", keyword, keyword).Limit(50).Order("id desc").Find(&goods).Error
+	err := db.Debug().Where("shop_id = ?", s.Ctx.Query("shop_id")).Where("name LIKE ? OR short_name LIKE ?", keyword, keyword).Limit(50).Order("id desc").Find(&goods).Error
 
 	if err == gorm.ErrRecordNotFound {
 		return []KeywordList{}, err, true
@@ -53,10 +53,10 @@ type NumberShow struct {
 	WholesalePrice float64 `json:"wholesale_price"`
 }
 
-func (s *GoodService) Number(number string) (NumberShow, error, bool) {
+func (s *GoodService) GoodsNumber(number string) (NumberShow, error, bool) {
 	db := models.DbLink()
 	var goods models.Goods
-	err := db.Debug().Where("number = ? AND is_del = ?", number, 0).First(&goods).Error
+	err := db.Debug().Where("shop_id = ? AND number = ? AND is_del = ?", s.Ctx.Query("shop_id"), number, 0).First(&goods).Error
 
 	if err == gorm.ErrRecordNotFound {
 		return NumberShow{}, err, true
@@ -86,6 +86,7 @@ func (s *GoodService) UpdateNumber(id int, number string) error {
 }
 
 type AddForm struct {
+	ShopId         uint    `form:"shop_id"`
 	Name           string  `form:"name"`
 	ShortName      string  `form:"short_name"`
 	Number         string  `form:"number"`
@@ -99,6 +100,7 @@ func (s *GoodService) GoodsAdd(form AddForm) {
 
 	db := models.DbLink()
 	db.Create(&models.Goods{
+		ShopId:         form.ShopId,
 		Name:           form.Name,
 		ShortName:      form.ShortName,
 		Number:         form.Number,

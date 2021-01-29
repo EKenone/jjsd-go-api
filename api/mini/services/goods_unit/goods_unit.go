@@ -14,7 +14,7 @@ func (s *GoodUnitService) List() []string {
 	var unit []string
 	db := models.DbLink()
 
-	db.Model(&models.GoodsUnit{}).Where("is_del = ?", 0).Order("id DESC").Pluck("title", &unit)
+	db.Model(&models.GoodsUnit{}).Where("shop_id = ? AND is_del = ?", s.Ctx.Query("shop_id"), 0).Order("id DESC").Pluck("title", &unit)
 
 	return unit
 }

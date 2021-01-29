@@ -7,6 +7,7 @@ import (
 
 type Goods struct {
 	ID             uint    `gorm:"column:id;primaryKey"`
+	ShopId         uint    `gorm:"column:shop_id"`
 	Name           string  `gorm:"column:name"`
 	ShortName      string  `gorm:"column:short_name"`
 	Number         string  `gorm:"column:number"`

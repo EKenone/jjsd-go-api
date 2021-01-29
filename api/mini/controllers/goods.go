@@ -33,7 +33,7 @@ func (c *Controller) GoodsKeywordList(ctx *gin.Context) {
 func (c *Controller) GoodsNumber(ctx *gin.Context) {
 	number := ctx.Query("number")
 	service := goods.GoodService{Ctx: ctx}
-	data, err, emp := service.Number(number)
+	data, err, emp := service.GoodsNumber(number)
 	if emp {
 		ctx.JSON(200, gin.H{"code": 200, "msg": "ok", "data": nil})
 		return

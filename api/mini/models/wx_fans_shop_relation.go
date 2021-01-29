@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-type GoodsFormat struct {
+type WxFansShopRelation struct {
 	ID        uint   `gorm:"column:id;primaryKey"`
 	ShopId    uint   `gorm:"column:shop_id"`
-	Title     string `gorm:"column:title"`
+	FansId    uint   `gorm:"column:fans_id"`
 	IsDel     uint   `gorm:"column:is_del"`
 	CreatedAt uint64 `gorm:"column:created_at"`
 	UpdatedAt uint64 `gorm:"column:updated_at"`
@@ -16,18 +16,18 @@ type GoodsFormat struct {
 	UpdatedBy uint   `gorm:"column:updated_by"`
 }
 
-func (GoodsFormat) TableName() string {
-	return "sd_goods_format"
+func (WxFansShopRelation) TableName() string {
+	return "sd_wx_fans_shop_relation"
 }
 
-func (t *GoodsFormat) BeforeCreate(db *gorm.DB) error {
+func (t *WxFansShopRelation) BeforeCreate(db *gorm.DB) error {
 	t.CreatedAt = uint64(time.Now().Unix())
 	t.UpdatedAt = uint64(time.Now().Unix())
 
 	return nil
 }
 
-func (t *GoodsFormat) BeforeUpdate(db *gorm.DB) error {
+func (t *WxFansShopRelation) BeforeUpdate(db *gorm.DB) error {
 	t.UpdatedAt = uint64(time.Now().Unix())
 
 	return nil
