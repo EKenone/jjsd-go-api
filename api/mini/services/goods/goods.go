@@ -100,7 +100,7 @@ type AddForm struct {
 func (s *GoodService) GoodsAdd(form AddForm) {
 
 	db := models.DbLink()
-	db.Create(&models.Goods{
+	db.Select("ShopId", "Name", "ShortName", "Number", "Unit", "Format", "WholesalePrice", "RetailPrice", "CreatedAt", "UpdatedAt").Create(&models.Goods{
 		ShopId:         form.ShopId,
 		Name:           form.Name,
 		ShortName:      form.ShortName,
