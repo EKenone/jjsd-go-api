@@ -62,6 +62,12 @@ func cors() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"code": 403, "msg": "登录过期，请重新登录"})
 			return
 		}
+
+		if fans.ID != 1 {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"code": 401, "msg": "无权操作"})
+			return
+		}
+
 		c.Set("user", fans)
 
 		// 处理请求

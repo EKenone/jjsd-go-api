@@ -124,7 +124,7 @@ func (s *GoodService) GoodsAdd(form AddForm) {
 
 	for _, v := range category {
 		cid, _ := strconv.Atoi(v)
-		db.Create(models.GoodsCategoryRelation{
+		db.Create(&models.GoodsCategoryRelation{
 			GoodsId:    goods.ID,
 			CategoryId: uint(cid),
 		})
