@@ -80,3 +80,9 @@ func (c *Controller) GoodsAdd(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{"code": 200, "msg": "ok"})
 }
+
+func (c *Controller) GoodsAttr(ctx *gin.Context) {
+	service := goods.GoodService{Ctx: ctx}
+	attr := service.GoodsAttr()
+	ctx.JSON(200, gin.H{"code": 200, "msg": "ok", "data": attr})
+}

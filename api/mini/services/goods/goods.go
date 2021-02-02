@@ -4,6 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"jjsd-go-api/api/mini/models"
+	"jjsd-go-api/api/mini/services/goods_category"
+	"jjsd-go-api/api/mini/services/goods_format"
+	"jjsd-go-api/api/mini/services/goods_unit"
+	"strconv"
+	"strings"
+	"sync"
 )
 
 type GoodService struct {
@@ -94,13 +100,13 @@ type AddForm struct {
 	Format         string  `form:"format"`
 	WholesalePrice float64 `form:"wholesale_price"`
 	RetailPrice    float64 `form:"retail_price"`
+	Category       string  `form:"category"`
 }
 
 // 添加商品
 func (s *GoodService) GoodsAdd(form AddForm) {
 
-	db := models.DbLink()
-	db.Select("ShopId", "Name", "ShortName", "Number", "Unit", "Format", "WholesalePrice", "RetailPrice", "CreatedAt", "UpdatedAt").Create(&models.Goods{
+	goods := models.Goods{
 		ShopId:         form.ShopId,
 		Name:           form.Name,
 		ShortName:      form.ShortName,
@@ -109,5 +115,55 @@ func (s *GoodService) GoodsAdd(form AddForm) {
 		Format:         form.Format,
 		WholesalePrice: form.WholesalePrice,
 		RetailPrice:    form.RetailPrice,
-	})
+	}
+
+	db := models.DbLink()
+	db.Select("ShopId", "Name", "ShortName", "Number", "Unit", "Format", "WholesalePrice", "RetailPrice", "CreatedAt", "UpdatedAt").Create(&goods)
+
+	category := strings.Split(form.Category, ",")
+
+	for _, v := range category {
+		cid, _ := strconv.Atoi(v)
+		db.Create(models.GoodsCategoryRelation{
+			GoodsId:    goods.ID,
+			CategoryId: uint(cid),
+		})
+	}
+
+}
+
+type AttrResp struct {
+	Format   []string                        `json:"format"`
+	Unit     []string                        `json:"unit"`
+	Category []goods_category.CategorySelect `json:"category"`
+}
+
+func (s *GoodService) GoodsAttr() AttrResp {
+	var attr AttrResp
+
+	g := sync.WaitGroup{}
+	g.Add(3)
+
+	go func() {
+		defer g.Done()
+		formatService := goods_format.GoodFormatService{Ctx: s.Ctx}
+		attr.Format = formatService.List()
+	}()
+
+	go func() {
+		defer g.Done()
+		unitService := goods_unit.GoodUnitService{Ctx: s.Ctx}
+		attr.Unit = unitService.List()
+	}()
+
+	go func() {
+		defer g.Done()
+		categoryService := goods_category.GoodCategoryService{Ctx: s.Ctx}
+		attr.Category = categoryService.List()
+	}()
+
+	g.Wait()
+
+	return attr
+
 }
